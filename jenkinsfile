@@ -11,46 +11,44 @@ properties([
 		choice(choices: ['checkout\nbuild\ntest\npackage'], description: 'starting stage', name: 'starting_stage')
 	])
 ])
-	def checkout() {
-		stage('checkout') {
-			steps {
-				git 'https://github.com/szheng60/myProject.git'
-			}
-		}
-	}
-	def build() {
-		stage('build') {
-			steps {
-				bat 'mvn clean compile'
-			}
-		}
-	}
-	def test() {
-		stage('test') {
-			steps {
-				bat 'mvn test'
-				junit '**/target/surefire-reports/TEST-*.xml'
-			}
-		}
-	}
-	def package() {
-		stage('package') {
-			steps {
-				bat 'mvn package'
-			}
-		}
-	}
-	
-	final list = ['checkout', 'build', 'test', 'package']
 	
 	stages {
-		def start = ${params.stage_start}
+		def checkout() {
+			stage('checkout') {
+				steps {
+					git 'https://github.com/szheng60/myProject.git'
+				}
+			}
+		}
+		def build() {
+			stage('build') {
+				steps {
+					bat 'mvn clean compile'
+				}
+			}
+		}
+		def test() {
+			stage('test') {
+				steps {
+					bat 'mvn test'
+					junit '**/target/surefire-reports/TEST-*.xml'
+				}
+			}
+		}
+		def package() {
+			stage('package') {
+				steps {
+					bat 'mvn package'
+				}
+			}
+		}
+		
+		final list = ['checkout', 'build', 'test', 'package']
+		final start = ${params.stage_start}
 		for (l in list) {
 			if (start == l) {
 				${l}()
 			}
 		}
 	}
-	
-
 }
