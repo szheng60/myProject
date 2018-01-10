@@ -6,9 +6,11 @@ pipeline {
 		maven 'Maven3.5.0'
 	}
 	
-	parameters {
-		choice(choices: 'checkout\nbuild\ntest\npackage',description: 'start', name: 'stage_start')
-	}
+properties([
+	parameters([
+		choice(choices: ['checkout\nbuild\ntest\npackage'], description: 'starting stage', name: 'starting_stage')
+	])
+])
 	def checkout() {
 		stage('checkout') {
 			steps {
