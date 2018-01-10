@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 pipeline {
-	agent { label 'windows' }
+	node{}
+
 	tools {
 		maven 'Maven3.5.0'
 	}
