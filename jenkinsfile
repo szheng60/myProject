@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 pipeline {
-	node{}
+	agent any
 
 	tools {
 		maven 'Maven3.5.0'
