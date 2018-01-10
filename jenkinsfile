@@ -5,27 +5,50 @@ pipeline {
 	tools {
 		maven 'Maven3.5.0'
 	}
-	stages {
+	
+	parameters {
+		choice(choices: 'checkout\nbuild\ntest\npackage',description: 'start', name: 'stage_start')
+	}
+	def checkout() {
 		stage('checkout') {
 			steps {
 				git 'https://github.com/szheng60/myProject.git'
 			}
 		}
+	}
+	def build() {
 		stage('build') {
 			steps {
 				bat 'mvn clean compile'
 			}
 		}
+	}
+	def test() {
 		stage('test') {
 			steps {
 				bat 'mvn test'
 				junit '**/target/surefire-reports/TEST-*.xml'
 			}
 		}
+	}
+	def package() {
 		stage('package') {
 			steps {
 				bat 'mvn package'
 			}
 		}
 	}
+	
+	final list = ['checkout', 'build', 'test', 'package']
+	
+	stages {
+		def start = ${params.stage_start}
+		for (l in list) {
+			if (start == l) {
+				${l}()
+			}
+		}
+	}
+	
+
 }
